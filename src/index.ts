@@ -35,6 +35,10 @@ app.use(auth);
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 
+app.get('*', (req, res) => {
+  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
+});
+
 // подключаем логер ошибок
 app.use(errorLogger);
 // middleware для ошибок

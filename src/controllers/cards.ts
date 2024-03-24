@@ -31,7 +31,7 @@ export const deleteCard = (
 })
   .then((card) => {
     if (!card) throw next(new ValidationError('операция недоступна'));
-    res.send(card);
+    res.status(201).send(card);
   })
   .catch(next);
 

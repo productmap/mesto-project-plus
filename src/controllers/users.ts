@@ -1,4 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
+import {
+  json, NextFunction, Request, Response,
+} from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
@@ -18,12 +20,12 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
     }))
     .then((user) => {
       if (user) {
-        res.send(user);
+        const { password, ...response } = JSON.parse(JSON.stringify(user));
+        res.status(201).send(response);
       }
     })
     .catch((err) => {
-      if (err.code === 11000) throw new ConflictError('Пользователь с таким email уже существует');
-      // console.log(err);
+      if (err.code === 11000) return next(new ConflictError('Пользователь с таким email уже существует'));
       return next(err);
     });
 };
@@ -96,7 +98,7 @@ export const updateUser = (
     name: req.body.name,
     about: req.body.about,
   },
-  { new: true },
+  { new: true, runValidators: true },
 )
   .then((user) => res.send(user))
   .catch(next);
@@ -111,6 +113,7 @@ export const updateAvatar = (
   {
     avatar: req.body.avatar,
   },
+  { new: true, runValidators: true },
 )
   .then((user) => res.send(user))
   .catch(next);
