@@ -1,5 +1,4 @@
 import { celebrate, Joi } from 'celebrate';
-import validator from 'validator';
 
 export const updateUserValidator = celebrate({
   body: Joi.object().keys({
@@ -32,6 +31,24 @@ export const updateAvatarValidator = celebrate({
 
 export const getUserValidator = celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().required(),
+    userId: Joi.string().length(24).hex().required(),
+  }),
+});
+
+export const deleteCardValidator = celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().required(),
+  }),
+});
+
+export const likeCardValidator = celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().required(),
+  }),
+});
+
+export const dislikeCardValidator = celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().required(),
   }),
 });

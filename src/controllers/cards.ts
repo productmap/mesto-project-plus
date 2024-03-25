@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { StatusCode } from 'status-code-enum';
 import Card from '../models/card';
 import ValidationError from '../middlewares/errors/ValidationError';
 import NotFoundError from '../middlewares/errors/NotFoundError';
@@ -31,7 +32,7 @@ export const deleteCard = (
 })
   .then((card) => {
     if (!card) throw next(new ValidationError('операция недоступна'));
-    res.status(201).send(card);
+    res.status(StatusCode.SuccessCreated).send(card);
   })
   .catch(next);
 

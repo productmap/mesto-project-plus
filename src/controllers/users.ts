@@ -1,8 +1,7 @@
-import {
-  json, NextFunction, Request, Response,
-} from 'express';
+import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { StatusCode } from 'status-code-enum';
 import User from '../models/user';
 import config from '../config';
 import { ConflictError, NotFoundError } from '../middlewares/errors';
@@ -21,7 +20,7 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
     .then((user) => {
       if (user) {
         const { password, ...response } = JSON.parse(JSON.stringify(user));
-        res.status(201).send(response);
+        res.status(StatusCode.SuccessCreated).send(response);
       }
     })
     .catch((err) => {
@@ -37,7 +36,7 @@ export const login = (
 ) => User.findUserByCredentials(req.body.email, req.body.password)
   .then((user) => {
     const { _id } = user;
-    const token = jwt.sign({ _id }, config.jwt.secret, { expiresIn: '7d' });
+    const token = jwt.sign({ _id }, config.jwt.secret, { expiresIn: config.jwt.expiresIn });
 
     res.cookie('jwt', token, {
       httpOnly: true,
@@ -45,7 +44,7 @@ export const login = (
       maxAge: 3600000 * 24,
     });
 
-    res.status(200).send({ token });
+    res.status(StatusCode.SuccessOK).send({ token });
   })
   .catch(next);
 
