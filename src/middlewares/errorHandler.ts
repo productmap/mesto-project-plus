@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { StatusCode } from 'status-code-enum';
 
 interface IError {
   statusCode: number;
@@ -7,15 +8,14 @@ interface IError {
 
 const errorHandler = (
   err: IError,
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const { statusCode = 500, message } = err;
+  const { statusCode = StatusCode.ServerErrorInternal, message } = err;
   console.log(err);
   res.status(statusCode).send({
-    // message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
-    message,
+    message: statusCode === StatusCode.ServerErrorInternal ? 'На сервере произошла ошибка' : message,
   });
 
   next();

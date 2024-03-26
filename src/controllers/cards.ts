@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCode } from 'status-code-enum';
 import Card from '../models/card';
-import ValidationError from '../middlewares/errors/ValidationError';
+import BadRequestError from '../middlewares/errors/BadRequestError';
 import NotFoundError from '../middlewares/errors/NotFoundError';
 
 // Возвращает все карточки
@@ -17,7 +17,7 @@ export const createCard = (req: Request, res: Response, next: NextFunction) => C
 })
   .then((card) => res.send(card))
   .catch((err) => {
-    if (err.name === 'ValidationError') throw next(new ValidationError('Некорректные данные'));
+    if (err.name === 'ValidationError') throw next(new BadRequestError('Некорректные данные'));
     next(err);
   });
 
@@ -31,7 +31,7 @@ export const deleteCard = (
   owner: req.body.user._id,
 })
   .then((card) => {
-    if (!card) throw next(new ValidationError('операция недоступна'));
+    if (!card) throw next(new BadRequestError('операция недоступна'));
     res.status(StatusCode.SuccessCreated).send(card);
   })
   .catch(next);
