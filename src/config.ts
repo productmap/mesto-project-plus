@@ -1,11 +1,11 @@
 import 'dotenv/config';
 
 export default {
-  host: process.env.HOST || 'localhost',
+  host: process.env.HOST || '127.0.0.1',
   port: process.env.PORT || 3000,
   basePath: process.env.BASE_PATH || '',
   db: {
-    host: process.env.DB_HOST || 'localhost',
+    host: process.env.DB_HOST || '127.0.0.1',
     port: process.env.DB_PORT || 27017,
     database: process.env.DB_DATABASE || 'mestodb',
   },

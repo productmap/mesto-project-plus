@@ -13,7 +13,6 @@ const errorHandler = (
   next: NextFunction,
 ) => {
   const { statusCode = StatusCode.ServerErrorInternal, message } = err;
-  console.log(err);
   res.status(statusCode).send({
     message: statusCode === StatusCode.ServerErrorInternal ? 'На сервере произошла ошибка' : message,
   });
